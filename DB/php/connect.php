@@ -20,6 +20,8 @@ function CloseCon($conn)
  $conn -> close();
  }
    
+  echo Opencon();
+  
 ?>
  </body>
 </html>
