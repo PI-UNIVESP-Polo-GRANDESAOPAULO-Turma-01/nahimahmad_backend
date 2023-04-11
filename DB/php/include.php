@@ -1,54 +1,39 @@
-<?php
 
+<?php
+// Conecta-se ao banco de dados usando as credenciais fornecidas
 $dbhost = "localhost";
 $dbuser = "colegioa_chromeuser";
 $dbpass = "mateus@2023";
 $db = "colegioa_controlechrome";
 
+
+// Cria uma vari���vel para armazenar a conex���o
 $conn = mysqli_connect($dbhost, $dbuser, $dbpass, $db);
 
-// Verifica se a conexão foi bem-sucedida
+// Verifica se a conex���o foi bem sucedida
 if (!$conn) {
-    die("Erro ao conectar ao banco de dados: " . mysqli_connect_error());
+  die("Falha na conex���o: " . mysqli_connect_error());
 }
 
-// Cria as tabelas ALUNO, APARELHO e CONTRATO usando a sintaxe SQL
-$sql = "
-CREATE TABLE ALUNO
-(
-	ID_ALUNO INT (20),
-    NME_NOME VARCHAR(20),
-	CONSTRAINT PK_ALUNO PRIMARY KEY (ID_ALUNO)
-);
+// Obt���m os dados do formul���rio
+$aluno = $_POST['aluno'];
+$email = $_POST['e-mail'];
+$matricula = $_POST['matr���cula'];
+$n_de_serie = $_POST['n_de_serie'];
+$dt_entrega = $_POST['dt_entrega'];
+$conservacao = $_POST['conservacao'];
 
-CREATE TABLE APARELHO
-(
-	NRO_SERIE INT (20),
-    DSC_MARCA VARCHAR(20),
-	DSC_MODELO VARCHAR(20),
-	DSC_ESTADO VARCHAR(20),
-	ID_ALUNO INT (20),
-	CONSTRAINT PK_APARELHO PRIMARY KEY (NRO_SERIE)
-);
+// Prepara uma consulta SQL para inserir os dados na tabela
+$sql = "INSERT INTO CADASTRO (aluno, email, matricula, n_de_serie, dt_entrega, conservacao) VALUES ('$aluno', '$email', '$matricula', '$n_de_serie', '$dt_entrega', '$conservacao')";
 
-CREATE TABLE CONTRATO
-(
-	ID_CONTRATO INT AUTO_INCREMENT,
-	DTA_ASSINATURA DATE,
-    DTA_VALIDADE DATE,
-    ID_ALUNO INT, 
-    NRO_SERIE INT,
-	CONSTRAINT PK_CONTRATO PRIMARY KEY (ID_CONTRATO)
-);
-";
-
-// Executa o comando SQL no banco de dados
-if (mysqli_multi_query($conn, $sql)) {
-    echo "Tabelas criadas com sucesso.";
+// Executa a consulta e verifica se foi bem sucedida
+if (mysqli_query($conn, $sql)) {
+  echo "Cadastro realizado com sucesso!";
 } else {
-    echo "Erro ao criar tabelas: " . mysqli_error($conn);
+  echo "Erro ao cadastrar: " . mysqli_error($conn);
 }
 
-// Fecha a conexão com o banco de dados
+// Fecha a conex���o
 mysqli_close($conn);
 ?>
+
